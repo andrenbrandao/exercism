@@ -1,11 +1,11 @@
 package cars
 
-const CARS_PRODUCED_PER_HOUR = 221
+const carsProducedPerHour = 221
 
 // CalculateProductionRatePerHour for the assembly line, taking into account
 // its success rate
 func CalculateProductionRatePerHour(speed int) float64 {
-	return float64(speed*CARS_PRODUCED_PER_HOUR) * successRate(speed)
+	return float64(speed*carsProducedPerHour) * successRate(speed)
 }
 
 // CalculateProductionRatePerMinute describes how many working items are
