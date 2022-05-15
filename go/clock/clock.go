@@ -1,11 +1,8 @@
 package clock
 
-import "fmt"
-
-type Clock struct {
-	hours   int
-	minutes int
-}
+import (
+	"fmt"
+)
 
 /*
 Let's try to think on how to solve by using the examples
@@ -41,13 +38,14 @@ Then, we fix the negative value by adding 1440
 and modding it again.
 
 */
+
+type Clock struct {
+	hours   int
+	minutes int
+}
+
 func New(h, m int) Clock {
-	totalMinutes := h*60 + m
-	clockBased := (totalMinutes%1440 + 1440) % 1440
-
-	hours := clockBased / 60
-	minutes := clockBased - hours*60
-
+	hours, minutes := normalizeHoursAndMinutes(h, m)
 	return Clock{hours, minutes}
 }
 
@@ -61,4 +59,16 @@ func (c Clock) Subtract(m int) Clock {
 
 func (c Clock) String() string {
 	return fmt.Sprintf("%02d:%02d", c.hours, c.minutes)
+}
+
+const dayInMinutes = 1440
+const hourInMinutes = 60
+
+func normalizeHoursAndMinutes(h int, m int) (int, int) {
+	totalMinutes := h*hourInMinutes + m
+	clockBased := (totalMinutes%dayInMinutes + dayInMinutes) % dayInMinutes
+
+	hours := clockBased / hourInMinutes
+	minutes := clockBased - hours*hourInMinutes
+	return hours, minutes
 }
