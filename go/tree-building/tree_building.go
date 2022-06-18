@@ -49,8 +49,12 @@ func Build(records []Record) (*Node, error) {
 		return nil, nil
 	}
 
-	var nodes []*Node
-	sortRecords(records)
+	nodes := make([]*Node, 0, len(records))
+
+	// Sort records by ID
+	sort.Slice(records, func(i, j int) bool {
+		return records[i].ID < records[j].ID
+	})
 
 	for _, r := range records {
 		// Check parent comes before the node
@@ -87,8 +91,26 @@ func Build(records []Record) (*Node, error) {
 	return nodes[0], nil
 }
 
-func sortRecords(records []Record) {
-	sort.Slice(records, func(i, j int) bool {
-		return records[i].ID < records[j].ID
-	})
-}
+/*
+## Benchmarks ##
+
+> Without allocation capacity for the nodes slice
+var nodes []*Node
+
+BenchmarkTwoTree
+BenchmarkTwoTree-8                    74          14949914 ns/op         5801320 B/op     131102 allocs/op
+BenchmarkTenTree
+BenchmarkTenTree-8                   933           1965076 ns/op          954386 B/op      15023 allocs/op
+BenchmarkShallowTree
+BenchmarkShallowTree-8               676           2326532 ns/op         1092682 B/op      10043 allocs/op
+
+> Allocating capacity for the nodes slice
+nodes := make([]*Node, 0, len(records))
+
+BenchmarkTwoTree
+BenchmarkTwoTree-8                    82          14207013 ns/op         3407951 B/op     131075 allocs/op
+BenchmarkTenTree
+BenchmarkTenTree-8                  1072           1514248 ns/op          650009 B/op      15004 allocs/op
+BenchmarkShallowTree
+BenchmarkShallowTree-8              1207           1401872 ns/op          788305 B/op      10024 allocs/op
+*/
