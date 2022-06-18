@@ -30,7 +30,7 @@ and also parents will have a lower ID, we can:
 	- Get its parent in the array and add itself as a child
 - Return the first node in the array as the root
 
-Time Complexity: O(n)
+Time Complexity: O(nlgn)
 Space Complexity: O(n)
 */
 
