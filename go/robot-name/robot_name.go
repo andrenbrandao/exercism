@@ -75,16 +75,16 @@ func generateAllNames() []string {
 	numberTriplets := make([]string, 0, 1000)
 
 	// Generate pairs of letters from AA to ZZ
-	for i := 65; i <= 90; i++ {
-		for j := 65; j <= 90; j++ {
+	for i := 'A'; i <= 'Z'; i++ {
+		for j := 'A'; j <= 'Z'; j++ {
 			letterPairs = append(letterPairs, fmt.Sprintf("%c%c", i, j))
 		}
 	}
 
 	// Generate triplets of numbers from 000 to 999
-	for i := 48; i <= 57; i++ {
-		for j := 48; j <= 57; j++ {
-			for k := 48; k <= 57; k++ {
+	for i := '0'; i <= '9'; i++ {
+		for j := '0'; j <= '9'; j++ {
+			for k := '0'; k <= '9'; k++ {
 				numberTriplets = append(numberTriplets, fmt.Sprintf("%c%c%c", i, j, k))
 			}
 		}
