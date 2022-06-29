@@ -30,6 +30,7 @@ var decodeTests = []struct {
 	{"12WB12W3B24WB", "WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB", "single characters with repeated characters"},
 	{"2 hs2q q2w2 ", "  hsqq qww  ", "multiple whitespace mixed in string"},
 	{"2a3b4c", "aabbbcccc", "lower case string"},
+	{"a10b", "abbbbbbbbbb", "10 repeated characters"},
 }
 
 // encode and then decode

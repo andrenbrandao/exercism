@@ -73,7 +73,7 @@ func RunLengthDecode(input string) string {
 	for i := 0; i < len(input); i++ {
 		symbol := input[i]
 
-		if symbol >= '1' && symbol <= '9' {
+		if symbol >= '0' && symbol <= '9' {
 			count = count*10 + int(symbol-'0')
 			continue
 		}
