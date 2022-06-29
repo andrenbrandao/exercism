@@ -119,30 +119,20 @@ func addResults(team1 string, team2 string, gameResult string, tm TeamGameMap) {
 		tm[team2] = &Game{team: team2, matches: 0, wins: 0, draws: 0, losses: 0, points: 0}
 	}
 
-	if val, ok := tm[team1]; ok {
-		switch gameResult {
-		case "win":
-			val.wins++
-			val.points += 3
-		case "loss":
-			val.losses++
-		case "draw":
-			val.draws++
-			val.points++
-		}
-	}
-
-	if val, ok := tm[team2]; ok {
-		switch gameResult {
-		case "win":
-			val.losses++
-		case "loss":
-			val.wins++
-			val.points += 3
-		case "draw":
-			val.draws++
-			val.points++
-		}
+	switch gameResult {
+	case "win":
+		tm[team1].wins++
+		tm[team1].points += 3
+		tm[team2].losses++
+	case "loss":
+		tm[team1].losses++
+		tm[team2].wins++
+		tm[team2].points += 3
+	case "draw":
+		tm[team1].draws++
+		tm[team1].points++
+		tm[team2].draws++
+		tm[team2].points++
 	}
 }
 
