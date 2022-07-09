@@ -5,8 +5,8 @@ import (
 	"unicode"
 )
 
-type shift int
-type vigenere []int
+type shift int32
+type vigenere []int32
 
 const (
 	defaultShift = 3
@@ -28,10 +28,10 @@ func (c shift) Encode(input string) string {
 	res := strings.Builder{}
 
 	for _, char := range input {
-		if (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') {
+		if unicode.IsLetter(char) {
 			lowercase := unicode.ToLower(char)
-			shiftedChar := shiftChar(byte(lowercase), int(c))
-			res.WriteByte(shiftedChar)
+			shiftedChar := shiftChar(lowercase, int32(c))
+			res.WriteRune(shiftedChar)
 		}
 	}
 
@@ -39,17 +39,8 @@ func (c shift) Encode(input string) string {
 }
 
 func (c shift) Decode(input string) string {
-	res := strings.Builder{}
-
-	for _, char := range input {
-		if (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') {
-			lowercase := unicode.ToLower(char)
-			shiftedChar := shiftChar(byte(lowercase), -1*int(c))
-			res.WriteByte(shiftedChar)
-		}
-	}
-
-	return res.String()
+	c = -c
+	return c.Encode(input)
 }
 
 func NewVigenere(key string) Cipher {
@@ -69,7 +60,7 @@ func NewVigenere(key string) Cipher {
 			aCount++
 		}
 
-		res = append(res, int(char-'a'))
+		res = append(res, char-'a')
 	}
 
 	if aCount == len(key) {
@@ -84,11 +75,11 @@ func (v vigenere) Encode(input string) string {
 
 	convertPos := 0
 	for _, char := range input {
-		if (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') {
+		if unicode.IsLetter(char) {
 			lowercase := unicode.ToLower(char)
 			viginerePos := convertPos % len(v)
-			shiftedChar := shiftChar(byte(lowercase), v[viginerePos])
-			res.WriteByte(shiftedChar)
+			shiftedChar := shiftChar(lowercase, v[viginerePos])
+			res.WriteRune(shiftedChar)
 			convertPos++
 		}
 	}
@@ -101,11 +92,11 @@ func (v vigenere) Decode(input string) string {
 
 	convertPos := 0
 	for _, char := range input {
-		if (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') {
+		if unicode.IsLetter(char) {
 			lowercase := unicode.ToLower(char)
 			viginerePos := convertPos % len(v)
-			shiftedChar := shiftChar(byte(lowercase), -v[viginerePos])
-			res.WriteByte(shiftedChar)
+			shiftedChar := shiftChar(lowercase, -v[viginerePos])
+			res.WriteRune(shiftedChar)
 			convertPos++
 		}
 	}
@@ -113,9 +104,8 @@ func (v vigenere) Decode(input string) string {
 	return res.String()
 }
 
-func shiftChar(char byte, val int) byte {
-	charInt := int(char)
-	shiftedChar := byte((charInt-int('a')+val%modulus+modulus)%modulus + int('a'))
+func shiftChar(char rune, val int32) rune {
+	shiftedChar := (char-'a'+val%modulus+modulus)%modulus + 'a'
 
 	return shiftedChar
 }
