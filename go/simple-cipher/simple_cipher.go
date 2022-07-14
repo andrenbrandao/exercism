@@ -44,30 +44,41 @@ func (c shift) Decode(input string) string {
 }
 
 func NewVigenere(key string) Cipher {
-	if len(key) == 0 {
+	if !isValidViginere(key) {
 		return nil
 	}
 
-	aCount := 0
 	res := make(vigenere, 0, len(key))
 
 	for _, char := range key {
-		if char < 'a' || char > 'z' {
-			return nil
-		}
-
-		if char == 'a' {
-			aCount++
-		}
-
 		res = append(res, char-'a')
 	}
 
-	if aCount == len(key) {
-		return nil
+	return res
+}
+
+func isValidViginere(key string) bool {
+	return len(key) != 0 && !hasOnlyAs(key) && !hasInvalidChars(key)
+}
+
+func hasOnlyAs(key string) bool {
+	for _, char := range key {
+		if char != 'a' {
+			return false
+		}
 	}
 
-	return res
+	return true
+}
+
+func hasInvalidChars(key string) bool {
+	for _, char := range key {
+		if char < 'a' || char > 'z' {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (v vigenere) Encode(input string) string {
