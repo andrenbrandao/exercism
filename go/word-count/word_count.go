@@ -3,6 +3,7 @@
 package wordcount
 
 import (
+	"regexp"
 	"strings"
 	"unicode"
 )
@@ -26,8 +27,25 @@ Space Complexity: O(n)
 
 type Frequency map[string]int
 
+// WordCountRegex counts the words in a phrase
+// It returns a map of strings with their frequencies.
+// BenchmarkWordCount
+// BenchmarkWordCount-8       15409             82745 ns/op           26629 B/op        344 allocs/op.
+func WordCountRegex(phrase string) Frequency {
+	freq := Frequency{}
+	re := regexp.MustCompile(`\b[\w']+\b`)
+
+	for _, str := range re.FindAllString(phrase, -1) {
+		freq[strings.ToLower(str)]++
+	}
+
+	return freq
+}
+
 // WordCount counts the words in a phrase
 // It returns a map of strings with their frequencies.
+// BenchmarkWordCount
+// BenchmarkWordCount-8      144775              9465 ns/op            3504 B/op         76 allocs/op.
 func WordCount(phrase string) Frequency {
 	freq := Frequency{}
 	sb := strings.Builder{}
