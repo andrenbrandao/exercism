@@ -8,6 +8,8 @@ import (
 
 /*
 
+SOLUTION 1
+
 We want to convert from normal numbers to romans.
 
 1 -> I
@@ -59,7 +61,8 @@ var intToRoman = map[int]string{
 	1000: "M",
 }
 
-func ToRomanNumeral(input int) (string, error) {
+// BenchmarkRomanNumerals-8          549159              3447 ns/op             384 B/op         48 allocs/op
+func ToRomanNumeralSol1(input int) (string, error) {
 	digitPos := 0
 	sb := strings.Builder{}
 
@@ -112,4 +115,54 @@ func reverseString(s string) string {
 	}
 
 	return sb.String()
+}
+
+/*
+
+SOLUTION 2
+
+Use a greedy approach and take the maximum value we can from the input.
+Keep repeating until we reach zero.
+
+*/
+
+type intRoman struct {
+	val   int
+	roman string
+}
+
+var romanNumerals = []intRoman{
+	{1000, "M"},
+	{900, "CM"},
+	{500, "D"},
+	{400, "CD"},
+	{100, "C"},
+	{90, "XC"},
+	{50, "L"},
+	{40, "XL"},
+	{10, "X"},
+	{9, "IX"},
+	{5, "V"},
+	{4, "IV"},
+	{1, "I"},
+}
+
+func ToRomanNumeral(input int) (string, error) {
+	if input <= 0 || input > 3000 {
+		return "", errors.New("can only convert integers from 1 to 3000")
+	}
+
+	sb := strings.Builder{}
+
+	for input != 0 {
+		for _, c := range romanNumerals {
+			if input >= c.val {
+				sb.WriteString(c.roman)
+				input -= c.val
+				break
+			}
+		}
+	}
+
+	return sb.String(), nil
 }
