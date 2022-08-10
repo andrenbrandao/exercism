@@ -20,7 +20,7 @@ Edge cases:
 - Invalid digit, such as Y should be invalid
 
 Time Complexity: O(n)
-Space Complexity: O(n).
+Space Complexity: O(1).
 
 */
 
@@ -31,9 +31,12 @@ func IsValidISBN(isbn string) bool {
 	total := 0
 
 	for _, c := range isbn {
-		if c == '-' {
+		switch {
+		case c == '-':
 			continue
-		} else if isInvalidCharacterAtPos(c, charPos) {
+		case !unicode.IsDigit(c) && c != 'X':
+			return false
+		case c == 'X' && charPos != 10:
 			return false
 		}
 
@@ -49,17 +52,14 @@ func IsValidISBN(isbn string) bool {
 
 	return charPos == 11 && total%11 == 0
 }
-func isInvalidCharacterAtPos(c rune, charPos int) bool {
-	return !unicode.IsDigit(c) && c != 'X' || c == 'X' && charPos != 10
-}
-func getDigitVal(c rune) (int, error) {
-	if c == 'X' {
-		return 10, nil
-	}
 
-	if !unicode.IsDigit(c) {
+func getDigitVal(c rune) (int, error) {
+	switch {
+	case unicode.IsDigit(c):
+		return int(c) - '0', nil
+	case c == 'X':
+		return 10, nil
+	default:
 		return 0, errors.New("character is not a digit")
 	}
-
-	return int(c) - '0', nil
 }
