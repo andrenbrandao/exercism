@@ -1,9 +1,7 @@
 pub fn reverse(input: &str) -> String {
     let mut res = String::with_capacity(input.len());
 
-    for chr in (*input).chars().rev() {
-        res.push(chr);
-    }
+    res.extend((*input).chars().rev());
 
-    res.to_string()
+    res
 }
