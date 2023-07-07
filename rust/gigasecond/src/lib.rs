@@ -1,8 +1,7 @@
-use std::{ops::Add, time::Duration};
-
-use time::PrimitiveDateTime as DateTime;
+use time::{Duration, PrimitiveDateTime};
 
 // Returns a DateTime one billion seconds after start.
-pub fn after(start: DateTime) -> DateTime {
-    return start.add(Duration::new(1000000000, 0));
+pub fn after(start: PrimitiveDateTime) -> PrimitiveDateTime {
+    const GIGASECOND: Duration = Duration::new(1_000_000_000, 0);
+    start + GIGASECOND
 }
